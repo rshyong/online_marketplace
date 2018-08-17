@@ -8,8 +8,8 @@ import { UserIsAuthenticated } from './util/wrappers.js'
 // Layouts
 import App from './App'
 import Home from './layouts/home/Home'
-import Dashboard from './layouts/dashboard/Dashboard'
-import Profile from './user/layouts/profile/Profile'
+import DashboardContainer from './layouts/dashboard/DashboardContainer'
+import ProfileContainer from './user/layouts/profile/ProfileContainer'
 
 // Redux Store
 import store from './store'
@@ -21,8 +21,8 @@ ReactDOM.render((
       <Router history={history}>
         <Route path="/" component={App}>
           <IndexRoute component={Home} />
-          <Route path="dashboard" component={UserIsAuthenticated(Dashboard)} />
-          <Route path="profile" component={UserIsAuthenticated(Profile)} />
+          <Route path="dashboard" component={UserIsAuthenticated(DashboardContainer)} />
+          <Route path="profile" component={UserIsAuthenticated(ProfileContainer)} />
         </Route>
       </Router>
     </Provider>
