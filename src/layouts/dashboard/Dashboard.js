@@ -2,16 +2,16 @@
 
 import React, { Component } from 'react'
 import getWeb3 from '../../util/getWeb3';
-import SimpleStorageContract from '../../../build/contracts/SimpleStorage.json'
+import OnlineMarketplace from '../../../build/contracts/OnlineMarketplace.json';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      storageValue: 0,
       web3: null,
       contract: null,
       account: null,
+      owners: [],
     }
   }
 
@@ -29,37 +29,34 @@ class Dashboard extends Component {
 
   instantiateContract() {
     const contract = require('truffle-contract');
-    const simpleStorage = contract(SimpleStorageContract);
-    simpleStorage.setProvider(this.state.web3.currentProvider);
+    const onlineMarketplace = contract(OnlineMarketplace);
+    onlineMarketplace.setProvider(this.state.web3.currentProvider);
 
-    let simpleStorageInstance;
     this.state.web3.eth.getAccounts((error, accounts) => {
-      simpleStorage.deployed()
+      onlineMarketplace.deployed()
       .then(instance => {
-        simpleStorageInstance = instance;
-        return simpleStorageInstance.set(5, { from: accounts[0],})
-      })
-      .then(() => {
-        return simpleStorageInstance.get.call(accounts[0]);
-      })
-      .then(result => {
-        return this.setState({ storageValue: result.c[0], contract: simpleStorageInstance, account: accounts[0], });
+        return this.setState( { contract: instance, account: accounts[0], });
       })
     });
   }
 
-  handleClick() {
+  addOwner(evt) {
+    evt.preventDefault();
     const contract = this.state.contract;
     const account = this.state.account;
-    contract.set(3, { from: account, })
-    .then(result => {
-      return contract.get.call();
-    })
-    .then(result => {
-      this.setState({
-        storageValue: result.c[0],
+    let address = document.querySelector('#newStoreOwner').value;
+    let form = document.querySelector("#addressForm");
+    contract.addOwner(address, { from: account, })
+      .then(() => {
+        let owners = this.state.owners;
+        owners.push(address);
+        this.setState({
+          owners,
+        })
+      })
+      .then(() => {
+        form.reset();
       });
-    });
   }
 
   render() {
@@ -67,9 +64,14 @@ class Dashboard extends Component {
       <main className="container">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <h1>Dashboard</h1>
-            <p><strong>Congratulations {this.props.user.name}!</strong> If you're seeing this page, you've logged in with UPort successfully.</p>
-            <button onClick={this.handleClick.bind(this)}>Set Storage</button>
+            <h1>Welcome to MarketChain</h1>
+            <p><strong>Hi {this.props.user.name}!</strong></p>
+            <form id='addressForm'>
+              <label>Please enter in a new store owner (address)</label>
+              <input type="text" id="newStoreOwner"/>
+              <br/>
+              <input type="submit" onClick={this.addOwner.bind(this)}/>
+            </form>
           </div>
         </div>
       </main>
