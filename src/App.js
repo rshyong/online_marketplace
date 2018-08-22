@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { HiddenOnlyAuth, VisibleOnlyAuth } from './util/wrappers.js'
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import { HiddenOnlyAuth, VisibleOnlyAuth } from './util/wrappers.js';
+import getWeb3 from './util/getWeb3';
+import OnlineMarketplace from '../build/contracts/OnlineMarketplace.json';
 
 // UI Components
 import LoginButtonContainer from './user/ui/loginbutton/LoginButtonContainer'
@@ -13,6 +15,40 @@ import './css/pure-min.css'
 import './App.css'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      web3: null,
+      contract: null,
+      account: null,
+    };
+  }
+
+  async componentWillMount() {
+    try {
+      let results = await getWeb3;
+      this.setState({
+        web3: results.web3,
+      });
+      this.instantiateContract();
+    } catch(err) {
+      console.error('Unable to set web3, contract and account to state', err);
+    }
+  }
+
+  instantiateContract() {
+    const contract = require('truffle-contract');
+    const onlineMarketplace = contract(OnlineMarketplace);
+    onlineMarketplace.setProvider(this.state.web3.currentProvider);
+
+    this.state.web3.eth.getAccounts((error, accounts) => {
+      onlineMarketplace.deployed()
+      .then(instance => {
+        this.setState( { contract: instance, account: accounts[0], });
+      })
+    });
+  }
+
   render() {
     const OnlyAuthLinks = VisibleOnlyAuth(() =>
       <span>
@@ -42,7 +78,9 @@ class App extends Component {
           </ul>
         </nav>
 
-        {this.props.children}
+        {React.Children.map(this.props.children, (child) => {
+          return React.cloneElement(child, { web3: this.state.web3, contract: this.state.contract, account: this.state.account, })
+        })}
       </div>
     );
   }

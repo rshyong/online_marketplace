@@ -1,10 +1,15 @@
 /*eslint no-useless-constructor: 0*/
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class Profile extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.userPrivilege = this.props.userPrivilege.bind(this);
+  }
+
+  async componentWillMount() {
+    this.userPrivilege();
   }
 
   render() {
@@ -13,10 +18,14 @@ class Profile extends Component {
         <div className="pure-g">
           <div className="pure-u-1-1">
             <h1>Profile</h1>
-            <p>Change these details in UPort to see them reflected here.</p>
             <p>
-              <strong>Name</strong><br />
-              {this.props.user.name}
+              <strong>Privileges: </strong> {this.props.privilege}
+              <br/><br/>
+              <strong>Name: </strong> {this.props.user.name}
+              <br/><br/>
+              <strong>Phone: </strong> {this.props.user.phone}
+              <br/><br/>
+              <strong>Country: </strong> {this.props.user.country}
             </p>
           </div>
         </div>
