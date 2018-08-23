@@ -40,7 +40,14 @@ const mapDispatchToProps = (dispatch) => {
         let owners = await this.props.contract.getOwners({ from: this.props.account, });
         dispatch({ type: SET_OWNERS, payload: owners, });
       }
-    }, 
+    },
+    addNewStore: async function(evt) {
+      evt.preventDefault();
+      let name = document.querySelector('#newStoreName').value;
+      let image = document.querySelector('#newStoreImage').value;
+      let form = document.querySelector("#storeForm");
+      form.reset();
+    }
   }
 }
 

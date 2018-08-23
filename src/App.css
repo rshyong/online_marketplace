@@ -66,3 +66,13 @@ pre {
   height: 16px;
   margin-right: 10px;
 }
+
+#addNewStoreFront {
+  font-style: italic;
+  margin-top: 2rem;
+  text-decoration: underline;
+}
+
+.storeForm {
+  margin-bottom: 1rem;
+}
