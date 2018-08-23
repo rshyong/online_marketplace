@@ -24,29 +24,30 @@ class App extends Component {
     };
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     try {
       let results = await getWeb3;
       this.setState({
         web3: results.web3,
       });
-      this.instantiateContract();
+      await this.instantiateContract();
     } catch(err) {
-      console.error('Unable to set web3, contract and account to state', err);
+      console.error('Unable to initiate App.js', err);
     }
   }
 
-  instantiateContract() {
+  async instantiateContract() {
     const contract = require('truffle-contract');
     const onlineMarketplace = contract(OnlineMarketplace);
     onlineMarketplace.setProvider(this.state.web3.currentProvider);
-
-    this.state.web3.eth.getAccounts((error, accounts) => {
-      onlineMarketplace.deployed()
-      .then(instance => {
-        this.setState( { contract: instance, account: accounts[0], });
-      })
+    let accounts = await new Promise((resolve, reject) => {
+      this.state.web3.eth.getAccounts((error, accts) => {
+        if (error) reject(error);
+        resolve(accts);
+      });
     });
+    let instance = await onlineMarketplace.deployed();
+    this.setState({ contract: instance, account: accounts[0], });
   }
 
   render() {

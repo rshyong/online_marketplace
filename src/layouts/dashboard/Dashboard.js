@@ -6,10 +6,13 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.addOwner = this.props.addOwner.bind(this);
+    this.getOwners = this.props.getOwners.bind(this);
+    this.getPrivilege = this.props.getPrivilege.bind(this);
   }
 
-  async componentWillMount() {
-    this.getOwners();
+  async componentDidMount() {
+    await this.getPrivilege();
+    await this.getOwners();
   }
 
   render() {

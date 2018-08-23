@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import Dashboard from './Dashboard';
 
 const SET_OWNERS = 'SET_OWNERS';
+const SET_PRIVILEGE = 'SET_PRIVILEGE';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -9,6 +10,7 @@ const mapStateToProps = (state, ownProps) => {
       contract: ownProps.contract,
       account: ownProps.account,
       owners: state.layouts.owners,
+      privilege: state.layouts.privilege,
   }
 }
 
@@ -25,10 +27,20 @@ const mapDispatchToProps = (dispatch) => {
       owners.push(address);
       dispatch({ type: SET_OWNERS, payload: owners, });
       form.reset();
+    },   
+    getPrivilege: async function() {
+      let isAdmin = await this.props.contract.isAdmin({from: this.props.account, });
+      let isOwner = await this.props.contract.isOwner({from: this.props.account, });
+      if (isAdmin) dispatch({ type: SET_PRIVILEGE, payload: 'Admin', });
+      else if (isOwner) dispatch({ type: SET_PRIVILEGE, payload: 'Store Owner', });
+      else dispatch({ type: SET_PRIVILEGE, payload: 'Customer', });
     },
     getOwners: async function() {
-      // await contract.addOwner(address, { from: account, });
-    }
+      if (this.props.privilege === 'Admin') {
+        let owners = await this.props.contract.getOwners({ from: this.props.account, });
+        dispatch({ type: SET_OWNERS, payload: owners, });
+      }
+    }, 
   }
 }
 
