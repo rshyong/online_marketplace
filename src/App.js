@@ -21,6 +21,7 @@ class App extends Component {
       web3: null,
       contract: null,
       account: null,
+      ipfs: null,
     };
   }
 
@@ -31,6 +32,7 @@ class App extends Component {
         web3: results.web3,
       });
       await this.instantiateContract();
+      this.setupIPFS();
     } catch(err) {
       console.error('Unable to initiate App.js', err);
     }
@@ -48,6 +50,12 @@ class App extends Component {
     });
     let instance = await onlineMarketplace.deployed();
     this.setState({ contract: instance, account: accounts[0], });
+  }
+
+  setupIPFS() {
+    const IPFS = require('ipfs-api');
+    const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https', });
+    this.setState({ ipfs, });
   }
 
   render() {
@@ -80,7 +88,7 @@ class App extends Component {
         </nav>
 
         {React.Children.map(this.props.children, (child) => {
-          return React.cloneElement(child, { web3: this.state.web3, contract: this.state.contract, account: this.state.account, })
+          return React.cloneElement(child, { web3: this.state.web3, contract: this.state.contract, account: this.state.account, ipfs: this.state.ipfs, })
         })}
       </div>
     );

@@ -3,6 +3,8 @@ import Dashboard from './Dashboard';
 
 const SET_OWNERS = 'SET_OWNERS';
 const SET_PRIVILEGE = 'SET_PRIVILEGE';
+const SET_ERRORMSG = 'SET_ERRORMSG';
+const ADD_STORE = 'ADD_STORE';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -11,6 +13,7 @@ const mapStateToProps = (state, ownProps) => {
       account: ownProps.account,
       owners: state.layouts.owners,
       privilege: state.layouts.privilege,
+      errorMsg: state.layouts.errorMsg,
   }
 }
 
@@ -23,11 +26,9 @@ const mapDispatchToProps = (dispatch) => {
       let address = document.querySelector('#newStoreOwner').value;
       let form = document.querySelector("#addressForm");
       await contract.addOwner(address, { from: account, });
-      let owners = this.props.owners;
-      owners.push(address);
-      dispatch({ type: SET_OWNERS, payload: owners, });
+      dispatch({ type: SET_OWNERS, payload: address, });
       form.reset();
-    },   
+    },
     getPrivilege: async function() {
       let isAdmin = await this.props.contract.isAdmin({from: this.props.account, });
       let isOwner = await this.props.contract.isOwner({from: this.props.account, });
@@ -41,12 +42,33 @@ const mapDispatchToProps = (dispatch) => {
         dispatch({ type: SET_OWNERS, payload: owners, });
       }
     },
-    addNewStore: async function(evt) {
+    addNewStore: async function (evt) {
+      event.stopPropagation();
       evt.preventDefault();
       let name = document.querySelector('#newStoreName').value;
-      let image = document.querySelector('#newStoreImage').value;
+      let image = document.querySelector('#newStoreImage').files[0];
       let form = document.querySelector("#storeForm");
       form.reset();
+      if (!name) {
+        dispatch({ type: SET_ERRORMSG, payload: 'storeNameError', });
+        return;
+      } else if (!image) {
+        dispatch({ type: SET_ERRORMSG, payload: 'imageError', });
+        return;
+      } else {
+        dispatch({ type: SET_ERRORMSG, payload: '', });
+      }
+      let reader = new window.FileReader();
+      reader.readAsArrayBuffer(image);
+      reader.onloadend = async (reader) => {
+        //file is converted to a buffer for upload to IPFS
+        let imgBuffer = await Buffer.from(reader.currentTarget.result);
+        // add to IPFS
+        await this.props.ipfs.add(imgBuffer, async (err, ipfsHash) => {
+          await this.props.contract.addStore({ name, ipfsHash, }, { from: this.props.account, });
+          dispatch({ type: ADD_STORE, payload: { name, ipfsHash, }});
+        });
+      };
     }
   }
 }

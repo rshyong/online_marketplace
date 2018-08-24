@@ -76,3 +76,7 @@ pre {
 .storeForm {
   margin-bottom: 1rem;
 }
+
+.errorMsg {
+  color: red;
+}
