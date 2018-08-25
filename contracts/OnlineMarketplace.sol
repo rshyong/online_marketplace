@@ -191,6 +191,17 @@ contract OnlineMarketplace {
     storeFronts[msg.sender][_index].numProducts++;
   }
 
+  /** @dev Delete product from storefront.
+  * @param _index Index of storefront where product is sold.
+  * @param _num Index of product.
+  */
+  function deleteProduct(uint _index, string _num) public checkOwner checkStoreFrontExists(_index) checkIntegerUnderflow(storeFronts[msg.sender][_index].numProducts){
+    string _name = storeFronts[msg.sender][_index].products[_num].name;
+    emit EventDeleteProduct(_name);
+    delete storeFronts[msg.sender][_index].products[_num];
+    storeFronts[msg.sender][_index].numProducts--;
+  }
+
   /** @dev Get product from storefront.
   * @param _index Index of storefront where product is to be sold.
   * @param _num Index of product.
