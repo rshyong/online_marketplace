@@ -15,9 +15,18 @@ contract OnlineMarketplace {
   /** @dev Mapping of store owners to bool. Used to determine if address is new. */
   mapping(address => bool) public storeOwnersAddress;
 
+  /** @dev Product struct. Contains price and quantity of the product. */
+  struct Product{
+    uint price;
+    uint quantity;
+  }
+
+  /** @dev Storefront struct. Contains name of store, image (stored as ipfs hash), funds, and a mapping to its products. */
   struct StoreFront{
     string name;
     string ipfsHash;
+    uint funds;
+    mapping(string => Product) products;
   }
 
   /** @dev Mapping of store owners to number of storefronts. */
@@ -34,6 +43,9 @@ contract OnlineMarketplace {
 
   /** @dev Emit when a new storefront is added */
   event EventNewStoreFront(string indexed _storeName);
+
+  /** @dev Emit when a storefront is deleted */
+  event EventDeleteStoreFront(string indexed _storeName);
 
   /** @dev Modifier that checks to make sure the sender is an admin. */
   modifier checkAdmin() {
@@ -61,8 +73,7 @@ contract OnlineMarketplace {
   modifier checkStoreFrontName(string _name) {
     bool checkName = true;
     for (uint i = 0; i < numStoreFronts[msg.sender]; i ++) {
-      string memory storeName = storeFronts[msg.sender][i].name;
-      if (storeName == _name) {
+      if (keccak256(storeFronts[msg.sender][i].name) == keccak256(_name)) {
         checkName = false;
         break;
       }
@@ -91,12 +102,11 @@ contract OnlineMarketplace {
   */
   function deleteOwner(uint _index) public checkAdmin {
     address _address = storeOwners[_index];
-    if (storeOwnersAddress[_address]) {
-      emit EventDeleteOwner(_address);
-      storeOwnersAddress[_address] = false;
-      delete storeOwners[_index];
-      numStoreOwners--;
-    }
+    require (storeOwnersAddress[_address] && numStoreOwners - 1 < numStoreOwners);
+    emit EventDeleteOwner(_address);
+    storeOwnersAddress[_address] = false;
+    delete storeOwners[_index];
+    numStoreOwners--;
   }
   
   /** @dev Add a storefront.
@@ -105,8 +115,19 @@ contract OnlineMarketplace {
   */
   function addStoreFront(string _name, string _ipfsHash) public checkOwner checkStoreFrontName(_name) {
     emit EventNewStoreFront(_name);
-    storeFronts[msg.sender].push(StoreFront(_name, _ipfsHash));
+    storeFronts[msg.sender].push(StoreFront(_name, _ipfsHash, 0));
     numStoreFronts[msg.sender]++;
+  }
+
+  /** @dev Delete a storefront.
+  * @param _index Index of storefront to be deleted.
+  */
+  function deleteStoreFront(uint _index) public checkOwner {
+    require(keccak256(storeFronts[msg.sender][_index].name) != keccak256('') && numStoreFronts[msg.sender] - 1 < numStoreFronts[msg.sender]);
+    string _name = storeFronts[msg.sender][_index].name;
+    emit EventDeleteStoreFront(_name);
+    delete storeFronts[msg.sender][_index];
+    numStoreFronts[msg.sender]--;
   }
 
   /** @dev Fallback function. */
