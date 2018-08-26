@@ -7,8 +7,10 @@ const initialState = {
   
   const layoutsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'SET_OWNERS':
+        case 'SET_OWNER':
             return Object.assign({}, state, { owners: state.owners.concat([action.payload]), });
+        case 'SET_OWNERS':
+            return Object.assign({}, state, { owners: action.payload, });
         case 'SET_PRIVILEGE':
             return Object.assign({}, state, { privilege: action.payload, });
         case 'SET_ERRORMSG':

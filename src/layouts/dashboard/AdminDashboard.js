@@ -15,7 +15,7 @@ class AdminDashboard extends Component {
                     <label>Please enter in a new store owner (address)</label>
                     <input type="text" id="newStoreOwner"/>
                     <br/>
-                    <input type="submit" onClick={this.addOwner}/>
+                    <input type="submit" onClick={this.props.addOwner}/>
                 </form>
                 {
                     owners.length

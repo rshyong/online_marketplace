@@ -26,7 +26,7 @@ class Dashboard extends Component {
             <h1>Welcome to MarketChain</h1>
             <p><strong>Hi {this.props.user.name}!</strong></p>
             {this.props.privilege === 'Admin'
-            ? <AdminDashboard owners={this.props.owners}/>
+            ? <AdminDashboard addOwner={this.props.addOwner} owners={this.props.owners} />
             : <StoreOwnerDashboard addNewStore={this.addNewStore} errorMsg={this.props.errorMsg}/>
             }
           </div>

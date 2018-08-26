@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Dashboard from './Dashboard';
 
+const SET_OWNER = 'SET_OWNER';
 const SET_OWNERS = 'SET_OWNERS';
 const SET_PRIVILEGE = 'SET_PRIVILEGE';
 const SET_ERRORMSG = 'SET_ERRORMSG';
@@ -17,28 +18,31 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addOwner: async function(evt) {
       evt.preventDefault();
-      const contract = this.props.contract;
-      const account = this.props.account;
       let address = document.querySelector('#newStoreOwner').value;
       let form = document.querySelector("#addressForm");
-      await contract.addOwner(address, { from: account, });
-      dispatch({ type: SET_OWNERS, payload: address, });
+      await ownProps.contract.addOwner(address, { from: ownProps.account, });
+      dispatch({ type: SET_OWNER, payload: address, });
       form.reset();
     },
     getPrivilege: async function() {
-      let isAdmin = await this.props.contract.isAdmin({from: this.props.account, });
-      let isOwner = await this.props.contract.isOwner({from: this.props.account, });
+      let isAdmin = await this.props.contract.isAdmin.call();
+      let isOwner = await this.props.contract.storeOwnersAddress(this.props.account);
       if (isAdmin) dispatch({ type: SET_PRIVILEGE, payload: 'Admin', });
       else if (isOwner) dispatch({ type: SET_PRIVILEGE, payload: 'Store Owner', });
       else dispatch({ type: SET_PRIVILEGE, payload: 'Customer', });
     },
     getOwners: async function() {
       if (this.props.privilege === 'Admin') {
-        let owners = await this.props.contract.getOwners({ from: this.props.account, });
+        let numOwners = await this.props.contract.numStoreOwners({ from: this.props.account, });
+        let owners = [];
+        for(let i = 0; i < numOwners; i++) {
+          let owner = await this.props.contract.storeOwners(i, { from: this.props.account, });
+          owners.push(owner);
+        }
         dispatch({ type: SET_OWNERS, payload: owners, });
       }
     },

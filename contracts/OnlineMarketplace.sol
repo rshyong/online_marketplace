@@ -4,7 +4,7 @@ pragma solidity ^0.4.17;
 contract OnlineMarketplace {
 
   /** @dev Address of admin. */
-  address public admin;
+  address private admin;
 
   /** @dev Number of store owners */
   uint public numStoreOwners = 0;
@@ -117,6 +117,11 @@ contract OnlineMarketplace {
   /** @dev Constructor function. Sets admin to be the contract owner. */
   constructor() public {
     admin = msg.sender;
+  }
+
+  /** @dev Checks to see if caller is admin. */
+  function isAdmin() public view returns(bool) {
+    return admin == msg.sender;
   }
   
   /** @dev Adds an owner to the storeOwners mapping.
