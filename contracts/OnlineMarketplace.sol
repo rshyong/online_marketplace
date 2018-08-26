@@ -48,25 +48,25 @@ contract OnlineMarketplace {
   event EventDeleteOwner(address indexed _address);
 
   /** @dev Emit when a new storefront is added. */
-  event EventNewStoreFront(string indexed _storeName);
+  event EventNewStoreFront(string _storeName);
 
   /** @dev Emit when a storefront is deleted. */
   event EventDeleteStoreFront(string indexed _storeName);
  
   /** @dev Emit when a product is added. */
-  event EventAddProduct(string indexed _productName);
+  event EventAddProduct(string _productName);
 
   /** @dev Emit when a product is deleted. */
-  event EventDeleteProduct(string indexed _productName);
+  event EventDeleteProduct(string _productName);
 
   /** @dev Emit when a product is bought. */
-  event EventBuyProduct(string indexed _productName);
+  event EventBuyProduct(string _productName);
   
   /** @dev Emit when a product is bought. */
-  event EventChangePrice(string indexed _productName);
+  event EventChangePrice(string _productName);
   
   /** @dev Emit when funds are withdrawn from store. */
-  event EventWithdrawFunds(string indexed _storeName);
+  event EventWithdrawFunds(string _storeName);
 
   /** @dev Modifier that checks to make sure the circuit breaker is off. */
   modifier emergencyStop() {

@@ -72,7 +72,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         // add to IPFS
         await this.props.ipfs.add(imgBuffer, async (err, result) => {
           let ipfsHash = result[0].hash;
-          // await this.props.contract.addStoreFront(name, ipfsHash, { from: this.props.account, });
+          await this.props.contract.addStoreFront(name, ipfsHash, { from: this.props.account, });
           dispatch({ type: ADD_STORE, payload: { name, ipfsHash, }});
         });
       };
