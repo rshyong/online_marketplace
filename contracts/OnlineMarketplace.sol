@@ -6,6 +6,9 @@ contract OnlineMarketplace {
   /** @dev Address of admin. */
   address private admin;
 
+  /** @dev Circuit breaker variable. Used to prevent people from buying products or withdrawing funds. */
+  bool public stopped = false;
+
   /** @dev Number of store owners */
   uint public numStoreOwners = 0;
 
@@ -65,6 +68,12 @@ contract OnlineMarketplace {
   /** @dev Emit when funds are withdrawn from store. */
   event EventWithdrawFunds(string indexed _storeName);
 
+  /** @dev Modifier that checks to make sure the circuit breaker is off. */
+  modifier emergencyStop() {
+    require(!stopped);
+    _;
+  }
+
   /** @dev Modifier that checks to make sure the sender is an admin. */
   modifier checkAdmin() {
     require(msg.sender == admin);
@@ -122,6 +131,16 @@ contract OnlineMarketplace {
   /** @dev Checks to see if caller is admin. */
   function isAdmin() public view returns(bool) {
     return admin == msg.sender;
+  }
+
+  /** @dev Flips circuit breaker on. */
+  function isEmergency() public checkAdmin {
+    stopped = true;
+  }
+
+  /** @dev Flips circuit breaker off. */
+  function isSafe() public checkAdmin {
+    stopped = false;
   }
   
   /** @dev Adds an owner to the storeOwners mapping.
@@ -228,7 +247,7 @@ contract OnlineMarketplace {
   * @param _index Index of storefront where product is to be sold.
   * @param _num Index of product.
   */
-  function buyProduct(address _address, uint _index, string _num, uint quantityToBuy) public payable {
+  function buyProduct(address _address, uint _index, string _num, uint quantityToBuy) public payable emergencyStop {
     uint _price = storeFronts[_address][_index].products[_num].price;
     uint _quantity = storeFronts[_address][_index].products[_num].quantity;
     uint totalPrice = _price * quantityToBuy;
@@ -252,7 +271,7 @@ contract OnlineMarketplace {
   /** @dev Withdraw funds from store.
   * @param _index Index of storefront where funds are to be withdrawn from.
   */
-  function withdrawFunds(uint _index) public checkOwner checkStoreFrontExists(_index) {
+  function withdrawFunds(uint _index) public emergencyStop checkOwner checkStoreFrontExists(_index) {
     require(storeFronts[msg.sender][_index].funds > 0);
     emit EventWithdrawFunds(storeFronts[msg.sender][_index].name);
     uint storeFunds = storeFronts[msg.sender][_index].funds;
