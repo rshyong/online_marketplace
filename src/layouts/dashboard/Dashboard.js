@@ -27,7 +27,7 @@ class Dashboard extends Component {
             <p><strong>Hi {this.props.user.name}!</strong></p>
             {this.props.privilege === 'Admin'
             ? <AdminDashboard addOwner={this.props.addOwner} owners={this.props.owners} />
-            : <StoreOwnerDashboard addNewStore={this.addNewStore} errorMsg={this.props.errorMsg}/>
+            : <StoreOwnerDashboard ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} stores={this.props.stores}/>
             }
           </div>
         </div>

@@ -12,9 +12,11 @@ const mapStateToProps = (state, ownProps) => {
       user: state.user.data,
       contract: ownProps.contract,
       account: ownProps.account,
+      ipfs: ownProps.ipfs,
       owners: state.layouts.owners,
       privilege: state.layouts.privilege,
       errorMsg: state.layouts.errorMsg,
+      stores: state.layouts.stores,
   }
 }
 
@@ -68,8 +70,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         //file is converted to a buffer for upload to IPFS
         let imgBuffer = await Buffer.from(reader.currentTarget.result);
         // add to IPFS
-        await this.props.ipfs.add(imgBuffer, async (err, ipfsHash) => {
-          await this.props.contract.addStore({ name, ipfsHash, }, { from: this.props.account, });
+        await this.props.ipfs.add(imgBuffer, async (err, result) => {
+          let ipfsHash = result[0].hash;
+          // await this.props.contract.addStoreFront(name, ipfsHash, { from: this.props.account, });
           dispatch({ type: ADD_STORE, payload: { name, ipfsHash, }});
         });
       };
