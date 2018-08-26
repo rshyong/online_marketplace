@@ -18,6 +18,7 @@ class StoreOwnerDashboard extends Component {
                 <form id='storeForm'>
                     <div id='addNewStoreFront'>Add a new store front</div>
                     <br/>
+
                     <div className="storeForm">
                     <label>Store Name: </label> <input type="text" id='newStoreName'/>
                     </div>
@@ -25,6 +26,7 @@ class StoreOwnerDashboard extends Component {
                     ? <div className='errorMsg'><strong>Please enter in a name.</strong></div>
                     : null}
                     <br/>
+
                     <div className="storeForm">
                     <label>Store Image: </label> <input type="file" id='newStoreImage'/>
                     </div>
@@ -32,6 +34,11 @@ class StoreOwnerDashboard extends Component {
                     ? <div className='errorMsg'><strong>Please upload an image.</strong></div>
                     : null}
                     <br/>
+
+                    {this.props.errorMsg === 'waitTime' 
+                    ? <div className='errorMsg'><strong>Your request is being processed. Please wait for the Metamask prompt.</strong></div>
+                    : null}
+
                     <input type="submit" onClick={this.props.addNewStore}/>
                 </form>
                 <br/>

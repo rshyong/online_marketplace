@@ -61,7 +61,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch({ type: SET_ERRORMSG, payload: 'imageError', });
         return;
       } else {
-        dispatch({ type: SET_ERRORMSG, payload: '', });
+        dispatch({ type: SET_ERRORMSG, payload: 'waitTime', });
       }
       form.reset();
       let reader = new window.FileReader();
