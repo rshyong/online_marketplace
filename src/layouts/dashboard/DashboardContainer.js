@@ -49,12 +49,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
     },
     addNewStore: async function (evt) {
-      event.stopPropagation();
+      evt.stopPropagation();
       evt.preventDefault();
       let name = document.querySelector('#newStoreName').value;
       let image = document.querySelector('#newStoreImage').files[0];
       let form = document.querySelector("#storeForm");
-      form.reset();
       if (!name) {
         dispatch({ type: SET_ERRORMSG, payload: 'storeNameError', });
         return;
@@ -64,6 +63,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       } else {
         dispatch({ type: SET_ERRORMSG, payload: '', });
       }
+      form.reset();
       let reader = new window.FileReader();
       reader.readAsArrayBuffer(image);
       reader.onloadend = async (reader) => {
