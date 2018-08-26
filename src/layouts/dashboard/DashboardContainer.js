@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       form.reset();
     },
     getPrivilege: async function() {
-      let isAdmin = await this.props.contract.isAdmin.call();
+      let isAdmin = await this.props.contract.isAdmin.call({from: this.props.account, });
       let isOwner = await this.props.contract.storeOwnersAddress(this.props.account);
       if (isAdmin) dispatch({ type: SET_PRIVILEGE, payload: 'Admin', });
       else if (isOwner) dispatch({ type: SET_PRIVILEGE, payload: 'Store Owner', });
