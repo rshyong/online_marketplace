@@ -38,26 +38,32 @@ contract OnlineMarketplace {
   /** @dev Mapping of store owners to a mapping of storefront name to ipfs hash string. */
   mapping (address => StoreFront[]) public storeFronts;
 
-  /** @dev Emit when a new owner is added */
+  /** @dev Emit when a new owner is added. */
   event EventNewOwner(address indexed _address);
 
-  /** @dev Emit when an owner is deleted */
+  /** @dev Emit when an owner is deleted. */
   event EventDeleteOwner(address indexed _address);
 
-  /** @dev Emit when a new storefront is added */
+  /** @dev Emit when a new storefront is added. */
   event EventNewStoreFront(string indexed _storeName);
 
-  /** @dev Emit when a storefront is deleted */
+  /** @dev Emit when a storefront is deleted. */
   event EventDeleteStoreFront(string indexed _storeName);
  
-  /** @dev Emit when a product is added */
+  /** @dev Emit when a product is added. */
   event EventAddProduct(string indexed _productName);
 
-  /** @dev Emit when a product is deleted */
+  /** @dev Emit when a product is deleted. */
   event EventDeleteProduct(string indexed _productName);
 
-  /** @dev Emit when a product is bought */
+  /** @dev Emit when a product is bought. */
   event EventBuyProduct(string indexed _productName);
+  
+  /** @dev Emit when a product is bought. */
+  event EventChangePrice(string indexed _productName);
+  
+  /** @dev Emit when funds are withdrawn from store. */
+  event EventWithdrawFunds(string indexed _storeName);
 
   /** @dev Modifier that checks to make sure the sender is an admin. */
   modifier checkAdmin() {
@@ -224,7 +230,29 @@ contract OnlineMarketplace {
     require(msg.value == totalPrice && _quantity - quantityToBuy < _quantity);
     emit EventBuyProduct(storeFronts[_address][_index].products[_num].name);
     storeFronts[_address][_index].products[_num].quantity -= quantityToBuy;
-    storeFronts[_address][_index].funds += _price;
+    storeFronts[_address][_index].funds += totalPrice;
+  }
+
+  /** @dev Change the price of the product.
+  * @param _index Index of storefront where product is sold.
+  * @param _num Index of product.
+  * @param newPrice New price of product.
+  */
+  function changePrice(uint _index, string _num, uint newPrice) public checkOwner checkStoreFrontExists(_index) {
+    require(newPrice > 0);
+    emit EventChangePrice(storeFronts[msg.sender][_index].products[_num].name);
+    storeFronts[msg.sender][_index].products[_num].price = newPrice;
+  }
+
+  /** @dev Withdraw funds from store.
+  * @param _index Index of storefront where funds are to be withdrawn from.
+  */
+  function withdrawFunds(uint _index) public checkOwner checkStoreFrontExists(_index) {
+    require(storeFronts[msg.sender][_index].funds > 0);
+    emit EventWithdrawFunds(storeFronts[msg.sender][_index].name);
+    uint storeFunds = storeFronts[msg.sender][_index].funds;
+    storeFronts[msg.sender][_index].funds = 0;
+    msg.sender.transfer(storeFunds);
   }
 
   /** @dev Fallback function. */
