@@ -236,11 +236,11 @@ contract OnlineMarketplace {
   }
 
   /** @dev Get product from storefront.
-  * @param _index Index of storefront where product is to be sold.
+  * @param _index Index of storefront where product is sold.
   * @param _num Index of product.
   */
-  function getProduct(address _address, uint _index, string _num) public view returns (string, uint, uint) {
-    return (storeFronts[_address][_index].products[_num].name, storeFronts[_address][_index].products[_num].price, storeFronts[_address][_index].products[_num].quantity);
+  function getProduct(address _address, uint _index, string _num) public view returns (string, uint, uint, string) {
+    return (storeFronts[_address][_index].products[_num].name, storeFronts[_address][_index].products[_num].price, storeFronts[_address][_index].products[_num].quantity, storeFronts[_address][_index].products[_num].ipfsHash);
   }
 
   /** @dev Buy product from storefront.

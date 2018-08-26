@@ -6,11 +6,10 @@ import { browserHistory } from 'react-router';
 class StoreOwnerDashboard extends Component {
     constructor(props) {
         super(props);
-        this.onClick = this.onClick.bind(this);
     }
 
-    onClick() {
-        browserHistory.push('/profile');
+    onClick(storeNum) {
+        browserHistory.push(`/store/${this.props.account}/${storeNum}`);
     }
 
     render() {
@@ -27,7 +26,7 @@ class StoreOwnerDashboard extends Component {
                     : null}
                     <br/>
                     <div className="storeForm">
-                    <label>Store Image (url): </label> <input type="file" id='newStoreImage'/>
+                    <label>Store Image: </label> <input type="file" id='newStoreImage'/>
                     </div>
                     {this.props.errorMsg === 'imageError' 
                     ? <div className='errorMsg'><strong>Please upload an image.</strong></div>
@@ -40,9 +39,9 @@ class StoreOwnerDashboard extends Component {
                 {this.props.stores.map((store, i) => {
                     let imgSrc = `data:image/jpg;base64, ${store.imgBuffer}`;
                     return (
-                        <button className='storeFront' key={i} onClick={this.onClick}>
+                        <button className='storeFront' key={i} onClick={this.onClick.bind(this, i)}>
                             <h1>{store.name}</h1>
-                            <img id="storeImg" src={imgSrc}></img>
+                            <img id="storeImg" src={imgSrc} alt="store"></img>
                         </button>
                     )
                 })}
