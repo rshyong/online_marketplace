@@ -88,3 +88,7 @@ pre {
   flex-wrap: wrap;
   flex-direction: row;
 }
+
+.storeFront {
+  margin-bottom: 2rem;
+}

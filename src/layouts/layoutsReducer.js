@@ -2,7 +2,8 @@ const initialState = {
     owners: [],
     privilege: '',
     errorMsg: '',
-    stores: [],
+    owner_stores: [],
+    all_stores: [],
 };
   
   const layoutsReducer = (state = initialState, action) => {
@@ -15,8 +16,8 @@ const initialState = {
             return Object.assign({}, state, { privilege: action.payload, });
         case 'SET_ERRORMSG':
             return Object.assign({}, state, { errorMsg: action.payload, });
-        case 'ADD_STORE':
-            return Object.assign({}, state, { stores: state.stores.concat([action.payload]), });
+        case 'ADD_OWNER_STORE':
+            return Object.assign({}, state, { owner_stores: state.owner_stores.concat([action.payload]), });
         default:
             return state;
     }

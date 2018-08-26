@@ -5,7 +5,7 @@ const SET_OWNER = 'SET_OWNER';
 const SET_OWNERS = 'SET_OWNERS';
 const SET_PRIVILEGE = 'SET_PRIVILEGE';
 const SET_ERRORMSG = 'SET_ERRORMSG';
-const ADD_STORE = 'ADD_STORE';
+const ADD_OWNER_STORE = 'ADD_OWNER_STORE';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
       owners: state.layouts.owners,
       privilege: state.layouts.privilege,
       errorMsg: state.layouts.errorMsg,
-      stores: state.layouts.stores,
+      owner_stores: state.layouts.owner_stores,
   }
 }
 
@@ -73,7 +73,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         await this.props.ipfs.add(imgBuffer, async (err, result) => {
           let ipfsHash = result[0].hash;
           await this.props.contract.addStoreFront(name, ipfsHash, { from: this.props.account, });
-          dispatch({ type: ADD_STORE, payload: { name, ipfsHash, }});
+          dispatch({ type: ADD_OWNER_STORE, payload: { name, imgBuffer: imgBuffer.toString('base64'), }});
         });
       };
     }

@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { HiddenOnlyAuth, VisibleOnlyAuth } from './util/wrappers.js';
 import getWeb3 from './util/getWeb3';
 import OnlineMarketplace from '../build/contracts/OnlineMarketplace.json';
+import store from './store';
 
 // UI Components
 import LoginButtonContainer from './user/ui/loginbutton/LoginButtonContainer'
@@ -32,7 +33,8 @@ class App extends Component {
         web3: results.web3,
       });
       await this.instantiateContract();
-      this.setupIPFS();
+      await this.setupIPFS();
+      await this.getStores();
     } catch(err) {
       console.error('Unable to initiate App.js', err);
     }
@@ -56,6 +58,21 @@ class App extends Component {
     const IPFS = require('ipfs-api');
     const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https', });
     this.setState({ ipfs, });
+  }
+
+  async getStores() {
+    let account = this.state.account;
+    let numStoreFronts = await this.state.contract.numStoreFronts(account);
+    numStoreFronts = numStoreFronts.c[0];
+    for (let i = 0; i < numStoreFronts; i++) {
+      let storeFront = await this.state.contract.storeFronts(account, i);
+      let imgBuffer = await new Promise((resolve, reject) => {
+        this.state.ipfs.files.get(storeFront[1], (err, files) => {
+          resolve(files[0].content.toString('base64'));
+        });
+      });
+      store.dispatch({type: 'ADD_OWNER_STORE', payload: { name: storeFront[0], imgBuffer, numProducts: storeFront[3].c[0], }});
+    }
   }
 
   render() {
