@@ -56,6 +56,9 @@ contract OnlineMarketplace {
   /** @dev Emit when a product is deleted */
   event EventDeleteProduct(string indexed _productName);
 
+  /** @dev Emit when a product is bought */
+  event EventBuyProduct(string indexed _productName);
+
   /** @dev Modifier that checks to make sure the sender is an admin. */
   modifier checkAdmin() {
     require(msg.sender == admin);
@@ -82,7 +85,7 @@ contract OnlineMarketplace {
   modifier checkStoreFrontName(string _name) {
     bool checkName = true;
     for (uint i = 0; i < numStoreFronts[msg.sender]; i ++) {
-      if (keccak256(storeFronts[msg.sender][i].name) == keccak256(_name)) {
+      if (keccak256(abi.encodePacked(storeFronts[msg.sender][i].name)) == keccak256(abi.encodePacked(_name))) {
         checkName = false;
         break;
       }
@@ -91,11 +94,11 @@ contract OnlineMarketplace {
     _;
   }
 
-  /** @dev Modifier that checks storefront exists. 
+  /** @dev Modifier that checks storefront exists for the caller. 
   * @param _index Index of storefront to be checked.
   */
   modifier checkStoreFrontExists(uint _index) {
-    require(keccak256(storeFronts[msg.sender][_index].name) != keccak256(''));
+    require(keccak256(abi.encodePacked(storeFronts[msg.sender][_index].name)) != keccak256(''));
     _;
   }
 
@@ -146,7 +149,7 @@ contract OnlineMarketplace {
   * @param _index Index of storefront to be deleted.
   */
   function deleteStoreFront(uint _index) public checkOwner checkStoreFrontExists(_index) checkIntegerUnderflow(numStoreFronts[msg.sender]) {
-    string _name = storeFronts[msg.sender][_index].name;
+    string memory _name = storeFronts[msg.sender][_index].name;
     emit EventDeleteStoreFront(_name);
     delete storeFronts[msg.sender][_index];
     numStoreFronts[msg.sender]--;
@@ -196,7 +199,7 @@ contract OnlineMarketplace {
   * @param _num Index of product.
   */
   function deleteProduct(uint _index, string _num) public checkOwner checkStoreFrontExists(_index) checkIntegerUnderflow(storeFronts[msg.sender][_index].numProducts){
-    string _name = storeFronts[msg.sender][_index].products[_num].name;
+    string memory _name = storeFronts[msg.sender][_index].products[_num].name;
     emit EventDeleteProduct(_name);
     delete storeFronts[msg.sender][_index].products[_num];
     storeFronts[msg.sender][_index].numProducts--;
@@ -206,12 +209,24 @@ contract OnlineMarketplace {
   * @param _index Index of storefront where product is to be sold.
   * @param _num Index of product.
   */
-  function getProduct(uint _index, string _num) public view returns (string, uint, uint) {
-    return (storeFronts[msg.sender][_index].products[_num].name, storeFronts[msg.sender][_index].products[_num].price, storeFronts[msg.sender][_index].products[_num].quantity);
+  function getProduct(address _address, uint _index, string _num) public view returns (string, uint, uint) {
+    return (storeFronts[_address][_index].products[_num].name, storeFronts[_address][_index].products[_num].price, storeFronts[_address][_index].products[_num].quantity);
+  }
+
+  /** @dev Buy product from storefront.
+  * @param _index Index of storefront where product is to be sold.
+  * @param _num Index of product.
+  */
+  function buyProduct(address _address, uint _index, string _num, uint quantityToBuy) public payable {
+    uint _price = storeFronts[_address][_index].products[_num].price;
+    uint _quantity = storeFronts[_address][_index].products[_num].quantity;
+    uint totalPrice = _price * quantityToBuy;
+    require(msg.value == totalPrice && _quantity - quantityToBuy < _quantity);
+    emit EventBuyProduct(storeFronts[_address][_index].products[_num].name);
+    storeFronts[_address][_index].products[_num].quantity -= quantityToBuy;
+    storeFronts[_address][_index].funds += _price;
   }
 
   /** @dev Fallback function. */
-  function() public {
-    revert();
-  }
+  function() public payable{}
 }
