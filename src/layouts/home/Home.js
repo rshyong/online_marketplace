@@ -6,7 +6,7 @@ class Home extends Component {
       <main className="container">
         <div className="pure-g">
           <div className="pure-u-1-1">
-            <h1>Please Login!</h1>
+            <h1>Welcome to MarketChain! Please login using UPort.</h1>
           </div>
         </div>
       </main>
