@@ -7,6 +7,7 @@ const initialState = {
 };
   
   const layoutsReducer = (state = initialState, action) => {
+    let updatedProducts;
     switch (action.type) {
         case 'SET_OWNER':
             return Object.assign({}, state, { owners: state.owners.concat([action.payload]), });
@@ -26,9 +27,16 @@ const initialState = {
             let newProducts = Object.assign([], state, state.products, storeProducts);
             return Object.assign({}, state, { producs: newProducts, });
         case 'ADD_STORE_PRODUCTS':
-            return Object.assign({}, state, { products: state.products.concat([action.payload]), });
+            updatedProducts = Object.assign([], state.products);
+            action.payload.forEach(product => {
+                let idx = product.idx;
+                delete product.idx;
+                updatedProducts[idx] = updatedProducts[idx] || [];
+                updatedProducts[idx].push(product);
+            });
+            return Object.assign({}, state, { products: updatedProducts, });
         case 'UPDATE_PRICE':
-            let updatedProducts = Object.assign([], state.products);
+            updatedProducts = Object.assign([], state.products);
             let { storeNum, productIdx, newPrice, } = action.payload;
             updatedProducts[ Number(storeNum)][Number(productIdx)].price = newPrice;
             return Object.assign({}, state, { products: updatedProducts, });

@@ -67,6 +67,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         let result = await this.props.contract.changePrice(storeNum, productIdx.toString(), newPrice, { from: this.props.account, });
         if (result) dispatch({ type: 'UPDATE_PRICE', payload: { storeNum, productIdx: productIdx.toString(), newPrice, }});
     },
+    removeProduct: async function(storeNum, productIdx) {
+        let result = await this.props.contract.deleteProduct(storeNum, productIdx.toString(), { from: this.props.account, });
+    }
   }
 }
 

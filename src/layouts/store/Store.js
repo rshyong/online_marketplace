@@ -17,7 +17,7 @@ class StoreOwnerDashboard extends Component {
                 <img id="storeImg" src={imgSrc} alt="store"></img>
                 </div>
                 <form id='productForm'>
-                    <div id='productForm'>Add a new product</div>
+                    <h1 id='productForm'>Add a new product</h1>
                     <br/>
 
                     <div className="productForm">
@@ -74,6 +74,7 @@ class StoreOwnerDashboard extends Component {
                                     <input type="text" id='updatePrice'/>
                                     <input type="submit" onClick={this.props.updatePrice.bind(this, this.props.params.storeNum, i)}/>
                                 </form>
+                                <button onClick={this.props.removeProduct.bind(this, this.props.params.storeNum, i)}>Remove Product from Store</button>
                                 {this.props.errorMsg === 'newPriceError'
                                 ? <div className='errorMsg'><strong>Please enter in a new price.</strong></div>
                                 : null}
