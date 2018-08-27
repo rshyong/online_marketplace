@@ -94,8 +94,6 @@ pre {
 }
 
 #products {
-  font-style: italic;
-  text-decoration: underline;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;

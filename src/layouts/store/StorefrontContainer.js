@@ -11,6 +11,7 @@ const mapStateToProps = (state, ownProps) => {
       privilege: state.layouts.privilege,
       errorMsg: state.layouts.errorMsg,
       owner_stores: state.layouts.owner_stores,
+      products: state.layouts.products,
   }
 }
 
@@ -50,8 +51,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             let ipfsHash = result[0].hash;
             await this.props.contract.addProduct(storeNum, name, price, quantity, ipfsHash, { from: this.props.account, });
             dispatch({ type: 'ADD_PRODUCT', payload: { storeNum, name, price, quantity, imgBuffer: imgBuffer.toString('base64'), }});
+            dispatch({ type: 'SET_ERRORMSG', payload: '', });
           });
         };
+    },
+    updatePrice: async function(storeNum, productIdx, evt) {
+        evt.preventDefault();
+        let newPrice = document.querySelector('#updatePrice').value;
+        let form = document.querySelector("#updatePriceForm");
+        if (!newPrice) {
+            dispatch({ type: 'SET_ERRORMSG', payload: 'newPriceError', });
+            return;
+        }
+        form.reset();
+        let result = await this.props.contract.changePrice(storeNum, productIdx.toString(), newPrice, { from: this.props.account, });
+        if (result) dispatch({ type: 'UPDATE_PRICE', payload: { storeNum, productIdx: productIdx.toString(), newPrice, }});
     },
   }
 }

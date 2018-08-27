@@ -74,6 +74,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           let ipfsHash = result[0].hash;
           await this.props.contract.addStoreFront(name, ipfsHash, { from: this.props.account, });
           dispatch({ type: ADD_OWNER_STORE, payload: { name, imgBuffer: imgBuffer.toString('base64'), }});
+          dispatch({ type: SET_ERRORMSG, payload: '', });
         });
       };
     }

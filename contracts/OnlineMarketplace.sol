@@ -63,7 +63,7 @@ contract OnlineMarketplace {
   event EventBuyProduct(string _productName);
   
   /** @dev Emit when a product is bought. */
-  event EventChangePrice(string _productName);
+  event EventChangePrice(address _address, uint _store, string _product, uint _newPrice, string _productName);
   
   /** @dev Emit when funds are withdrawn from store. */
   event EventWithdrawFunds(string _storeName);
@@ -264,7 +264,7 @@ contract OnlineMarketplace {
   */
   function changePrice(uint _index, string _num, uint newPrice) public checkOwner checkStoreFrontExists(_index) {
     require(newPrice > 0);
-    emit EventChangePrice(storeFronts[msg.sender][_index].products[_num].name);
+    emit EventChangePrice(msg.sender, _index, _num, newPrice, storeFronts[msg.sender][_index].products[_num].name);
     storeFronts[msg.sender][_index].products[_num].price = newPrice;
   }
 

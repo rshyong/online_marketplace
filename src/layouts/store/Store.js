@@ -61,15 +61,25 @@ class StoreOwnerDashboard extends Component {
 
                 <h1>Products</h1>
                 <div id='products'>
-                    {/* {this.props.stores.map((store, i) => {
-                        let imgSrc = `data:image/jpg;base64, ${store.imgBuffer}`;
+                    {this.props.products && this.props.products[this.props.params.storeNum].map((product, i) => {
+                        let imgSrc = `data:image/jpg;base64, ${product.imgBuffer}`;
                         return (
-                            <button className='product' key={i} onClick={this.onClick.bind(this, i)}>
-                                <h1>{store.name}</h1>
-                                <img id="storeImg" src={imgSrc} alt="store"></img>
-                            </button>
+                            <div className='product' key={i} >
+                                <h3>Name: {product.name}</h3>
+                                <img id="storeImg" src={imgSrc} alt="product"></img>
+                                <div>Price: {product.price}</div>
+                                <div>Quantity: {product.quantity}</div>
+                                <form id='updatePriceForm'>
+                                    <label>Update Price</label>
+                                    <input type="text" id='updatePrice'/>
+                                    <input type="submit" onClick={this.props.updatePrice.bind(this, this.props.params.storeNum, i)}/>
+                                </form>
+                                {this.props.errorMsg === 'newPriceError'
+                                ? <div className='errorMsg'><strong>Please enter in a new price.</strong></div>
+                                : null}
+                            </div>
                         )
-                    })} */}
+                    })}
                 </div>
                 <br/>
             </main>
