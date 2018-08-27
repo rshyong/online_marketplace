@@ -33,7 +33,7 @@ class App extends Component {
       this.setState({
         web3: results.web3,
       });
-      // store.dispatch({type: 'USER_LOGGED_IN', payload: {name: 'Rich', }});
+      store.dispatch({type: 'USER_LOGGED_IN', payload: {name: 'Rich', }});
       await this.instantiateContract();
       await this.setupIPFS();
       await this.getOwnStores();

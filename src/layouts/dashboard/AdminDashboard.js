@@ -12,7 +12,7 @@ class AdminDashboard extends Component {
         return (
             <div>
                 <form id='addressForm'>
-                    <label>Please enter in a new store owner (address)</label>
+                    <label>To add a new owner, please enter in the address</label>
                     <input type="text" id="newStoreOwner"/>
                     <br/>
                     <input type="submit" onClick={this.props.addOwner}/>
@@ -30,6 +30,9 @@ class AdminDashboard extends Component {
                     </div>
                     : null
                 }
+                <div>If there are issues with the contract, you can disable payments and withdrawals through the below buttons.</div>
+                <button onClick={this.props.isSafe}>Enable Payments and Withdrawals</button>
+                <button id='disablePaymentsAndWithdrawals' onClick={this.props.isEmergency}>Disable Payments and Withdrawals</button>
             </div>
         )
     }

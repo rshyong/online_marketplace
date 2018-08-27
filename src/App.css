@@ -114,3 +114,7 @@ pre {
   display: block;
   margin-bottom: 2rem;
 }
+
+#disablePaymentsAndWithdrawals {
+  margin-left: 2rem;
+}

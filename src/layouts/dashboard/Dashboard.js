@@ -12,6 +12,8 @@ class Dashboard extends Component {
     this.getOwners = this.props.getOwners.bind(this);
     this.getPrivilege = this.props.getPrivilege.bind(this);
     this.addNewStore = this.props.addNewStore.bind(this);
+    this.isEmergency = this.props.isEmergency.bind(this);
+    this.isSafe = this.props.isSafe.bind(this);
   }
 
   async componentDidMount() {
@@ -27,7 +29,7 @@ class Dashboard extends Component {
             <h1>Welcome to MarketChain</h1>
             <p><strong>Hi {this.props.user.name}!</strong></p>
             {this.props.privilege === 'Admin'
-            ? <AdminDashboard addOwner={this.props.addOwner} owners={this.props.owners} />
+            ? <AdminDashboard isEmergency={this.isEmergency} isSafe={this.isSafe} addOwner={this.props.addOwner} owners={this.props.owners} />
             : this.props.privilege === 'Store Owner'
               ? <StoreOwnerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} stores={this.props.owner_stores}/>
               : <CustomerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} allData={this.props.all_data}/>

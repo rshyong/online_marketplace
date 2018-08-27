@@ -78,7 +78,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           dispatch({ type: SET_ERRORMSG, payload: '', });
         });
       };
-    }
+    },
+    isEmergency: async function() {
+      await this.props.contract.isEmergency({from: this.props.account, });
+    },
+    isSafe: async function() {
+      await this.props.contract.isSafe({from: this.props.account, });
+    },
   }
 }
 
