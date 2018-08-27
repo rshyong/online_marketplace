@@ -21,11 +21,12 @@ const initialState = {
         case 'ADD_OWNER_STORE':
             return Object.assign({}, state, { owner_stores: state.owner_stores.concat([action.payload]), });
         case 'ADD_PRODUCT':
-            let sNum = action.payload.storeNum;
+            let storNum = action.payload.storeNum;
             delete action.payload.storeNum;
-            let storeProducts = state.products[sNum] || [];
+            let newProducts = Object.assign([], state.products);
+            let storeProducts = Object.assign([], state.products[storNum]);
             storeProducts.push(action.payload);
-            let newProducts = Object.assign([], state, state.products);
+            newProducts[storNum] = storeProducts;
             return Object.assign({}, state, { products: newProducts, });
         case 'ADD_STORE_PRODUCTS':
             updatedProducts = Object.assign([], state.products);
