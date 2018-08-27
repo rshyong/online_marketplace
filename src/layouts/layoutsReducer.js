@@ -25,6 +25,8 @@ const initialState = {
             storeProducts.push(action.payload);
             let newProducts = Object.assign([], state, state.products, storeProducts);
             return Object.assign({}, state, { producs: newProducts, });
+        case 'ADD_STORE_PRODUCTS':
+            return Object.assign({}, state, { products: state.products.concat([action.payload]), });
         default:
             return state;
     }
