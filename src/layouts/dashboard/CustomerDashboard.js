@@ -12,10 +12,9 @@ class CustomerDashboard extends Component {
     }
 
     render() {
-        console.log(this.props.stores);
         return (
             <div>
-                <div>Please select a store to shop in!</div>
+                <div style={{'margin-bottom': '2rem', }}>Please select a store to shop in!</div>
                 {this.props.stores && this.props.stores.map((store, i) => {
                     let imgSrc = `data:image/jpg;base64, ${store.imgBuffer}`;
                     return (<button className='storeFront' key={i} onClick={this.onClick.bind(this, i)}>
