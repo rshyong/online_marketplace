@@ -11,6 +11,7 @@ import Home from './layouts/home/Home';
 import DashboardContainer from './layouts/dashboard/DashboardContainer';
 import ProfileContainer from './user/layouts/profile/ProfileContainer';
 import StorefrontContainer from './layouts/store/StorefrontContainer';
+import CustomerContainer from './layouts/customer/CustomerContainer';
 
 // Redux Store
 import store from './store'
@@ -25,6 +26,7 @@ ReactDOM.render((
           <Route path="dashboard" component={UserIsAuthenticated(DashboardContainer)} />
           <Route path="profile" component={UserIsAuthenticated(ProfileContainer)} />
           <Route path="store/:id/:storeNum" component={UserIsAuthenticated(StorefrontContainer)} />
+          <Route path="customer/:id/:storeNum" component={UserIsAuthenticated(CustomerContainer)} />
         </Route>
       </Router>
     </Provider>

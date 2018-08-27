@@ -17,7 +17,7 @@ const mapStateToProps = (state, ownProps) => {
       privilege: state.layouts.privilege,
       errorMsg: state.layouts.errorMsg,
       owner_stores: state.layouts.owner_stores,
-      all_stores: state.layouts.all_stores,
+      all_data: ownProps.all_data,
   }
 }
 

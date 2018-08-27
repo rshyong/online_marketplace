@@ -23,6 +23,7 @@ class App extends Component {
       contract: null,
       account: null,
       ipfs: null,
+      all_data: {},
     };
   }
 
@@ -37,7 +38,7 @@ class App extends Component {
       await this.setupIPFS();
       await this.getOwnStores();
       await this.getOwnProducts();
-      await this.getAllStores();
+      await this.getAllStoresAndProducts();
     } catch(err) {
       console.error('Unable to initiate App.js', err);
     }
@@ -102,10 +103,10 @@ class App extends Component {
     });
   }
 
-  async getAllStores() {
+  async getAllStoresAndProducts() {
     let account = this.state.account;
-    let ipfs = this.state.ipfs;
     let contract = this.state.contract;
+    let ipfs = this.state.ipfs;
     let numOwners = await contract.numStoreOwners.call({from : account, });
     numOwners = numOwners.c[0];
     let ownersArr = [];
@@ -114,25 +115,41 @@ class App extends Component {
       ownersArr.push(owner);
     }
 
-    let storeFronts = await ownersArr.reduce(async (acc, owner) => {
+    let ownerStoreMap = await ownersArr.reduce(async (acc, owner) => {
       acc = await acc;
       let numStoreFronts = await contract.numStoreFronts.call(owner, { from: account, });
       numStoreFronts = numStoreFronts.c[0];
       for (let j = 0; j < numStoreFronts; j++) {
         let sf = await contract.storeFronts.call(owner, j, {from: account, });
-        acc.push(sf);
+        acc[owner] = acc[owner] || [];
+        acc[owner].push({ name: sf[0], ipfsHash: sf[1], funds: sf[2].c[0], numProducts: sf[3].c[0], idx: j, });
       }
       return acc;
-    }, []);
-    storeFronts = await Promise.all(storeFronts.map(async store => {
-      let imgBuffer = await new Promise((resolve, reject) => {
-        ipfs.files.get(store[1], (err, files) => {
-          if (files) resolve(files[0].content.toString('base64'));
+    }, {});
+
+    await Object.keys(ownerStoreMap).forEach(owner => {
+      ownerStoreMap[owner].forEach(async (store, i) => {
+        let imgBuffer = await new Promise((resolve, reject) => {
+          ipfs.files.get(store.ipfsHash, (err, files) => {
+            if (files) resolve(files[0].content.toString('base64'));
+          });
         });
+        ownerStoreMap[owner][i].imgBuffer = imgBuffer;
+        ownerStoreMap[owner][i].products = [];
+        for (let j = 0; j < store.numProducts; j++) {
+          let product = await contract.getProduct.call(owner, i, j.toString(), { from: account, });
+          if (product[0]) {
+            let imgBuffer = await new Promise((resolve, reject) => {
+              ipfs.files.get(product[3], (err, files) => {
+                if (files) resolve(files[0].content.toString('base64'));
+              });
+            });
+            ownerStoreMap[owner][i].products.push({ idx: j, imgBuffer, name: product[0], price: product[1].c[0], quantity: product[2].c[0], ipfsHash: product[3], });
+          }
+        }
       });
-      return { name: store[0], imgBuffer, };
-    }));
-    store.dispatch({ type: 'SET_ALL_STORES', payload: storeFronts, });
+    });
+    this.setState( { all_data: ownerStoreMap});
   }
 
   render() {
@@ -165,7 +182,7 @@ class App extends Component {
         </nav>
 
         {React.Children.map(this.props.children, (child) => {
-          return React.cloneElement(child, { web3: this.state.web3, contract: this.state.contract, account: this.state.account, ipfs: this.state.ipfs, })
+          return React.cloneElement(child, { all_data: this.state.all_data, web3: this.state.web3, contract: this.state.contract, account: this.state.account, ipfs: this.state.ipfs, })
         })}
       </div>
     );

@@ -30,7 +30,7 @@ class Dashboard extends Component {
             ? <AdminDashboard addOwner={this.props.addOwner} owners={this.props.owners} />
             : this.props.privilege === 'Store Owner'
               ? <StoreOwnerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} stores={this.props.owner_stores}/>
-              : <CustomerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} stores={this.props.all_stores}/>
+              : <CustomerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} allData={this.props.all_data}/>
             }
           </div>
         </div>
