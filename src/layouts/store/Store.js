@@ -52,7 +52,11 @@ class StoreOwnerDashboard extends Component {
                     : null}
                     <br/>
 
-                    <input type="submit" onClick={this.props.addNewProduct}/>
+                    {this.props.errorMsg === 'waitTime' 
+                    ? <div className='errorMsg'><strong>Your request is being processed. Please wait for the Metamask prompt.</strong></div>
+                    : null}
+
+                    <input type="submit" onClick={this.props.addNewProduct.bind(this, this.props.params.storeNum)}/>
                 </form>
                 <br/>
             </main>

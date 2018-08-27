@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    addNewProduct: async function(evt) {
+    addNewProduct: async function(storeNum, evt) {
         evt.stopPropagation();
         evt.preventDefault();
         let name = document.querySelector('#newProductName').value;
@@ -37,21 +37,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch({ type: 'SET_ERRORMSG', payload: 'imageError', });
             return;
         } else {
-            dispatch({ type: 'SET_ERRORMSG', payload: '', });
+            dispatch({ type: 'SET_ERRORMSG', payload: 'waitTime', });
         }
         form.reset();
-        // let reader = new window.FileReader();
-        // reader.readAsArrayBuffer(image);
-        // reader.onloadend = async (reader) => {
-        //   //file is converted to a buffer for upload to IPFS
-        //   let imgBuffer = await Buffer.from(reader.currentTarget.result);
-        //   // add to IPFS
-        //   await this.props.ipfs.add(imgBuffer, async (err, result) => {
-        //     let ipfsHash = result[0].hash;
-        //     await this.props.contract.addStoreFront(name, ipfsHash, { from: this.props.account, });
-        //     dispatch({ type: ADD_OWNER_STORE, payload: { name, imgBuffer: imgBuffer.toString('base64'), }});
-        //   });
-        // };
+        let reader = new window.FileReader();
+        reader.readAsArrayBuffer(image);
+        reader.onloadend = async (reader) => {
+          //file is converted to a buffer for upload to IPFS
+          let imgBuffer = await Buffer.from(reader.currentTarget.result);
+          // add to IPFS
+          await this.props.ipfs.add(imgBuffer, async (err, result) => {
+            let ipfsHash = result[0].hash;
+            await this.props.contract.addProduct(storeNum, name, price, quantity, ipfsHash, { from: this.props.account, });
+            dispatch({ type: 'ADD_PRODUCT', payload: { storeNum, name, price, quantity, imgBuffer: imgBuffer.toString('base64'), }});
+          });
+        };
     },
   }
 }
