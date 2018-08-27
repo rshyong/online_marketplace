@@ -4,6 +4,7 @@ const initialState = {
     errorMsg: '',
     owner_stores: [],
     products: [],
+    all_stores: [],
 };
   
   const layoutsReducer = (state = initialState, action) => {
@@ -40,6 +41,8 @@ const initialState = {
             let { storeNum, productIdx, newPrice, } = action.payload;
             updatedProducts[ Number(storeNum)].filter(prod => prod.i === Number(productIdx))[0].price = newPrice;
             return Object.assign({}, state, { products: updatedProducts, });
+        case 'SET_ALL_STORES':
+            return Object.assign({}, state, { all_stores: action.payload, });
         default:
             return state;
     }

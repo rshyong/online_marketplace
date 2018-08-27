@@ -36,6 +36,7 @@ class App extends Component {
       await this.setupIPFS();
       await this.getOwnStores();
       await this.getOwnProducts();
+      await this.getAllStores();
     } catch(err) {
       console.error('Unable to initiate App.js', err);
     }
@@ -98,6 +99,40 @@ class App extends Component {
       }
       dispatch({ type: 'ADD_STORE_PRODUCTS', payload: arr, });
     });
+  }
+
+  async getAllStores() {
+    let account = this.state.account;
+    let ipfs = this.state.ipfs;
+    let contract = this.state.contract;
+    let numOwners = await contract.numStoreOwners.call({from : account, });
+    numOwners = numOwners.c[0];
+    let ownersArr = [];
+    for (let i = 0; i < numOwners; i++) {
+      let owner = await contract.storeOwners.call(i, {from : account, });
+      ownersArr.push(owner);
+    }
+    let storeFronts = await new Promise((resolve, reject) => {
+      let storefronts = [];
+      ownersArr.forEach(async (owner, idx) => {
+        let numStoreFronts = await contract.numStoreFronts.call(owner, { from: account, });
+        numStoreFronts = numStoreFronts.c[0];
+        for (let j = 0; j < numStoreFronts; j++) {
+          let sf = await contract.storeFronts.call(owner, j, {from : account, });
+          storefronts.push(sf);
+          if (idx === ownersArr.length - 1 && j === numStoreFronts - 1) resolve(storefronts);
+        }
+      });
+    });
+    storeFronts = await Promise.all(storeFronts.map(async store => {
+      let imgBuffer = await new Promise((resolve, reject) => {
+        ipfs.files.get(store[1], (err, files) => {
+          if (files) resolve(files[0].content.toString('base64'));
+        });
+      });
+      return { name: store[0], imgBuffer, };
+    }));
+    store.dispatch({ type: 'SET_ALL_STORES', payload: storeFronts, });
   }
 
   render() {
