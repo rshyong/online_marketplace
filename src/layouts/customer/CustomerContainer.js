@@ -18,6 +18,24 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    buyProduct: async function(store, id, i, evt) {
+        evt.preventDefault();
+        let quantity = document.querySelector(`#${id}`).value;
+        quantity = Number(quantity);
+        let totalPrice = Number(store.products[i].price) * quantity;
+        let form = document.querySelector("#purchaseForm");
+        if (!quantity) {
+          dispatch({ type: 'SET_ERRORMSG', payload: `missingQuantity${i}` , });
+          return;
+        } else if (quantity > store.products[i].quantity) {
+          dispatch({ type: 'SET_ERRORMSG', payload: `errorQuantity${i}` , });
+          return;
+        } else {
+          dispatch({ type: 'SET_ERRORMSG', payload: `waitTime${i}`, });
+        }
+        form.reset();
+        await this.props.contract.buyProduct(this.props.params.id, Number(store.idx), store.products[i].idx.toString(), quantity, {from: this.props.account, value: totalPrice, });
+    }
   }
 }
 
