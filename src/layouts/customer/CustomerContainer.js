@@ -34,7 +34,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           dispatch({ type: 'SET_ERRORMSG', payload: `waitTime${i}`, });
         }
         form.reset();
-        await this.props.contract.buyProduct(this.props.params.id, Number(store.idx), store.products[i].idx.toString(), quantity, {from: this.props.account, value: totalPrice, });
+        let result = await this.props.contract.buyProduct(this.props.params.id, Number(store.idx), store.products[i].idx.toString(), quantity, {from: this.props.account, value: totalPrice, });
+        if (result) {
+            dispatch({ type: 'SET_ERRORMSG', payload: '', });
+            let newStore = Object.assign({}, store);
+            store.products[i].quantity -= quantity;
+            this.setState({ store: newStore, });
+        }
     }
   }
 }

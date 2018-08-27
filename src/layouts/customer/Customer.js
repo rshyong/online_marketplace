@@ -5,10 +5,13 @@ import React, { Component } from 'react';
 class Customer extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            store: this.props.all_data[this.props.params.id][this.props.params.storeNum],
+        }
     }
 
     render() {
-        let store = this.props.all_data[this.props.params.id][this.props.params.storeNum];
+        let store = this.state.store;
         let imgSrc = `data:image/jpg;base64, ${store.imgBuffer}`;
         return (
             <main className="container">
