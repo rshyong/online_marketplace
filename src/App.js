@@ -33,7 +33,7 @@ class App extends Component {
       this.setState({
         web3: results.web3,
       });
-      // store.dispatch({type: 'USER_LOGGED_IN', payload: {name: 'Rich', }});
+      store.dispatch({type: 'USER_LOGGED_IN', payload: {name: 'Rich', }});
       await this.instantiateContract();
       await this.setupIPFS();
       await this.getOwnStores();
@@ -75,7 +75,7 @@ class App extends Component {
           resolve(files[0].content.toString('base64'));
         });
       });
-      store.dispatch({type: 'ADD_OWNER_STORE', payload: { name: storeFront[0], imgBuffer, numProducts: storeFront[3].c[0], }});
+      store.dispatch({type: 'ADD_OWNER_STORE', payload: { name: storeFront[0], imgBuffer, numProducts: storeFront[3].c[0], funds: storeFront[2].c[0], }});
     }
   }
 

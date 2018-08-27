@@ -14,6 +14,8 @@ class StoreOwnerDashboard extends Component {
             <main className="container">
                 <div className='product'>
                 <h1>{store.name}</h1>
+                <h2>Funds Available to Withdraw: {store.funds}</h2>
+                <button className='withdrawFunds' onClick={this.props.withdrawFunds.bind(this, store)}>Withdraw Funds</button>
                 <img id="storeImg" src={imgSrc} alt="store"></img>
                 </div>
                 <form id='productForm'>

@@ -109,3 +109,8 @@ pre {
   margin-left: 2rem;
   margin-bottom: 2rem;
 }
+
+.withdrawFunds {
+  display: block;
+  margin-bottom: 2rem;
+}

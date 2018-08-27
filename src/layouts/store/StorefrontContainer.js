@@ -70,8 +70,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         if (result) dispatch({ type: 'UPDATE_PRICE', payload: { storeNum, productIdx, newPrice, }});
     },
     removeProduct: async function(storeNum, productIdx) {
-        let result = await this.props.contract.deleteProduct(storeNum, productIdx.toString(), { from: this.props.account, });
-    }
+        await this.props.contract.deleteProduct(storeNum, productIdx.toString(), { from: this.props.account, });
+    },
+    withdrawFunds: async function(store) {
+        let storeNum = Number(this.props.params.storeNum);
+        await this.props.contract.withdrawFunds(storeNum, {from: this.props.account, });
+        let newStores = Object.assign([], this.props.owner_stores);
+        newStores[storeNum].funds = 0;
+        dispatch({ type: 'WITHDRAW_FUND', payload: newStores, });
+    },
   }
 }
 
