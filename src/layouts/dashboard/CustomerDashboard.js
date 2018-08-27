@@ -12,6 +12,7 @@ class CustomerDashboard extends Component {
     }
 
     render() {
+        console.log(this.props.stores);
         return (
             <div>
                 <div>Please select a store to shop in!</div>

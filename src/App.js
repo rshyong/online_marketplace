@@ -32,6 +32,7 @@ class App extends Component {
       this.setState({
         web3: results.web3,
       });
+      // store.dispatch({type: 'USER_LOGGED_IN', payload: {name: 'Rich', }});
       await this.instantiateContract();
       await this.setupIPFS();
       await this.getOwnStores();
@@ -112,18 +113,17 @@ class App extends Component {
       let owner = await contract.storeOwners.call(i, {from : account, });
       ownersArr.push(owner);
     }
-    let storeFronts = await new Promise((resolve, reject) => {
-      let storefronts = [];
-      ownersArr.forEach(async (owner, idx) => {
-        let numStoreFronts = await contract.numStoreFronts.call(owner, { from: account, });
-        numStoreFronts = numStoreFronts.c[0];
-        for (let j = 0; j < numStoreFronts; j++) {
-          let sf = await contract.storeFronts.call(owner, j, {from : account, });
-          storefronts.push(sf);
-          if (idx === ownersArr.length - 1 && j === numStoreFronts - 1) resolve(storefronts);
-        }
-      });
-    });
+
+    let storeFronts = await ownersArr.reduce(async (acc, owner) => {
+      acc = await acc;
+      let numStoreFronts = await contract.numStoreFronts.call(owner, { from: account, });
+      numStoreFronts = numStoreFronts.c[0];
+      for (let j = 0; j < numStoreFronts; j++) {
+        let sf = await contract.storeFronts.call(owner, j, {from: account, });
+        acc.push(sf);
+      }
+      return acc;
+    }, []);
     storeFronts = await Promise.all(storeFronts.map(async store => {
       let imgBuffer = await new Promise((resolve, reject) => {
         ipfs.files.get(store[1], (err, files) => {
