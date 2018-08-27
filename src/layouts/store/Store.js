@@ -58,6 +58,19 @@ class StoreOwnerDashboard extends Component {
 
                     <input type="submit" onClick={this.props.addNewProduct.bind(this, this.props.params.storeNum)}/>
                 </form>
+
+                <h1>Products</h1>
+                <div id='products'>
+                    {/* {this.props.stores.map((store, i) => {
+                        let imgSrc = `data:image/jpg;base64, ${store.imgBuffer}`;
+                        return (
+                            <button className='product' key={i} onClick={this.onClick.bind(this, i)}>
+                                <h1>{store.name}</h1>
+                                <img id="storeImg" src={imgSrc} alt="store"></img>
+                            </button>
+                        )
+                    })} */}
+                </div>
                 <br/>
             </main>
         )
