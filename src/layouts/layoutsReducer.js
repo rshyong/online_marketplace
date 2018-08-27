@@ -25,7 +25,7 @@ const initialState = {
             delete action.payload.storeNum;
             let storeProducts = state.products[sNum] || [];
             storeProducts.push(action.payload);
-            let newProducts = Object.assign([], state, state.products, storeProducts);
+            let newProducts = Object.assign([], state, state.products);
             return Object.assign({}, state, { products: newProducts, });
         case 'ADD_STORE_PRODUCTS':
             updatedProducts = Object.assign([], state.products);
