@@ -90,7 +90,13 @@ pre {
 }
 
 .storeFront {
+  margin-left: 2rem;
   margin-bottom: 2rem;
+}
+
+#storeImg, #productImg {
+  height: 15rem;
+  width: 25rem;
 }
 
 #products {
@@ -100,5 +106,6 @@ pre {
 }
 
 .product {
+  margin-left: 2rem;
   margin-bottom: 2rem;
 }

@@ -67,7 +67,7 @@ class StoreOwnerDashboard extends Component {
                         return (
                             <div className='product' key={i} >
                                 <h3>Name: {product.name}</h3>
-                                <img id="storeImg" src={imgSrc} alt="product"></img>
+                                <img id="productImg" src={imgSrc} alt="product"></img>
                                 <div>Price: {product.price}</div>
                                 <div>Quantity: {product.quantity}</div>
                                 <form id='updatePriceForm'>
