@@ -70,14 +70,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         if (result) dispatch({ type: 'UPDATE_PRICE', payload: { storeNum, productIdx, newPrice, }});
     },
     removeProduct: async function(storeNum, productIdx) {
+        storeNum = Number(storeNum);
         await this.props.contract.deleteProduct(storeNum, productIdx.toString(), { from: this.props.account, });
+        let newProducts = Object.assign([], this.props.products);
+        newProducts = newProducts.map((product, i) => {
+            if (i === storeNum) {
+                product = product.filter(prod => prod.i !== productIdx);
+            }
+            return product;
+        });
+        dispatch({ type: 'SET_PRODUCTS', payload: newProducts, });
     },
     withdrawFunds: async function(store) {
         let storeNum = Number(this.props.params.storeNum);
         await this.props.contract.withdrawFunds(storeNum, {from: this.props.account, });
         let newStores = Object.assign([], this.props.owner_stores);
         newStores[storeNum].funds = 0;
-        dispatch({ type: 'WITHDRAW_FUND', payload: newStores, });
+        dispatch({ type: 'SET_OWNER_STORE', payload: newStores, });
     },
   }
 }

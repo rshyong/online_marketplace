@@ -41,8 +41,10 @@ const initialState = {
             let { storeNum, productIdx, newPrice, } = action.payload;
             updatedProducts[ Number(storeNum)].filter(prod => prod.i === Number(productIdx))[0].price = newPrice;
             return Object.assign({}, state, { products: updatedProducts, });
-        case 'WITHDRAW_FUND':
+        case 'SET_OWNER_STORE':
             return Object.assign({}, state, { owner_stores: action.payload, });
+        case 'SET_PRODUCTS':
+            return Object.assign({}, state, { products: action.payload, });
         default:
             return state;
     }
