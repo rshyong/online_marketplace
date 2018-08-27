@@ -33,7 +33,7 @@ class App extends Component {
       this.setState({
         web3: results.web3,
       });
-      // store.dispatch({type: 'USER_LOGGED_IN', payload: {name: 'Rich', }});
+      store.dispatch({type: 'USER_LOGGED_IN', payload: {name: 'Rich', }});
       await this.instantiateContract();
       await this.setupIPFS();
       await this.getOwnStores();
@@ -55,7 +55,7 @@ class App extends Component {
       });
     });
     let instance = await onlineMarketplace.deployed();
-    this.setState({ contract: instance, account: accounts[0], });
+    this.setState({ contract: instance, account: accounts[0].toLowerCase(), });
   }
 
   setupIPFS() {
@@ -66,10 +66,10 @@ class App extends Component {
 
   async getOwnStores() {
     let account = this.state.account;
-    let numStoreFronts = await this.state.contract.numStoreFronts(account);
-    numStoreFronts = numStoreFronts.c[0];
+    let numStoreFronts = await this.state.contract.numStoreFronts(account, {from: account, });
+    numStoreFronts = numStoreFronts.toNumber();
     for (let i = 0; i < numStoreFronts; i++) {
-      let storeFront = await this.state.contract.storeFronts(account, i);
+      let storeFront = await this.state.contract.storeFronts(account, i, {from: account, });
       let imgBuffer = await new Promise((resolve, reject) => {
         this.state.ipfs.files.get(storeFront[1], (err, files) => {
           resolve(files[0].content.toString('base64'));

@@ -48,7 +48,7 @@ contract OnlineMarketplace {
   event EventDeleteOwner(address indexed _address);
 
   /** @dev Emit when a new storefront is added. */
-  event EventNewStoreFront(string _storeName);
+  event EventNewStoreFront(string _storeName, address _address);
 
   /** @dev Emit when a storefront is deleted. */
   event EventDeleteStoreFront(string indexed _storeName);
@@ -170,7 +170,7 @@ contract OnlineMarketplace {
   * @param _ipfsHash Storefront image stored as IPFS hash.
   */
   function addStoreFront(string _name, string _ipfsHash) public checkOwner checkStoreFrontName(_name) {
-    emit EventNewStoreFront(_name);
+    emit EventNewStoreFront(_name, msg.sender);
     storeFronts[msg.sender].push(StoreFront(_name, _ipfsHash, 0, 0));
     numStoreFronts[msg.sender]++;
   }
