@@ -61,8 +61,9 @@ class StoreOwnerDashboard extends Component {
 
                 <h1>Products</h1>
                 <div id='products'>
-                    {this.props.products && this.props.products[this.props.params.storeNum].map((product, i) => {
+                    {this.props.products && this.props.products[this.props.params.storeNum] && this.props.products[this.props.params.storeNum].map((product, i) => {
                         let imgSrc = `data:image/jpg;base64, ${product.imgBuffer}`;
+                        let updatePriceId = `updatePrice${product.i}`
                         return (
                             <div className='product' key={i} >
                                 <h3>Name: {product.name}</h3>
@@ -71,10 +72,10 @@ class StoreOwnerDashboard extends Component {
                                 <div>Quantity: {product.quantity}</div>
                                 <form id='updatePriceForm'>
                                     <label>Update Price</label>
-                                    <input type="text" id='updatePrice'/>
-                                    <input type="submit" onClick={this.props.updatePrice.bind(this, this.props.params.storeNum, i)}/>
+                                    <input type="text" id={updatePriceId}/>
+                                    <input type="submit" onClick={this.props.updatePrice.bind(this, this.props.params.storeNum, product.i)}/>
                                 </form>
-                                <button onClick={this.props.removeProduct.bind(this, this.props.params.storeNum, i)}>Remove Product from Store</button>
+                                <button onClick={this.props.removeProduct.bind(this, this.props.params.storeNum, product.i)}>Remove Product from Store</button>
                                 {this.props.errorMsg === 'newPriceError'
                                 ? <div className='errorMsg'><strong>Please enter in a new price.</strong></div>
                                 : null}

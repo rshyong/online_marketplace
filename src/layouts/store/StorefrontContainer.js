@@ -49,15 +49,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           // add to IPFS
           await this.props.ipfs.add(imgBuffer, async (err, result) => {
             let ipfsHash = result[0].hash;
-            await this.props.contract.addProduct(storeNum, name, price, quantity, ipfsHash, { from: this.props.account, });
-            dispatch({ type: 'ADD_PRODUCT', payload: { storeNum, name, price, quantity, imgBuffer: imgBuffer.toString('base64'), }});
-            dispatch({ type: 'SET_ERRORMSG', payload: '', });
+            let addProdResult = await this.props.contract.addProduct(storeNum, name, price, quantity, ipfsHash, { from: this.props.account, });
+            if (addProdResult) {
+                dispatch({ type: 'ADD_PRODUCT', payload: { storeNum, name, price, quantity, imgBuffer: imgBuffer.toString('base64'), }});
+                dispatch({ type: 'SET_ERRORMSG', payload: '', });
+            }
           });
         };
     },
     updatePrice: async function(storeNum, productIdx, evt) {
         evt.preventDefault();
-        let newPrice = document.querySelector('#updatePrice').value;
+        let newPrice = document.querySelector(`#updatePrice${productIdx}`).value;
         let form = document.querySelector("#updatePriceForm");
         if (!newPrice) {
             dispatch({ type: 'SET_ERRORMSG', payload: 'newPriceError', });
@@ -65,7 +67,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
         form.reset();
         let result = await this.props.contract.changePrice(storeNum, productIdx.toString(), newPrice, { from: this.props.account, });
-        if (result) dispatch({ type: 'UPDATE_PRICE', payload: { storeNum, productIdx: productIdx.toString(), newPrice, }});
+        if (result) dispatch({ type: 'UPDATE_PRICE', payload: { storeNum, productIdx, newPrice, }});
     },
     removeProduct: async function(storeNum, productIdx) {
         let result = await this.props.contract.deleteProduct(storeNum, productIdx.toString(), { from: this.props.account, });

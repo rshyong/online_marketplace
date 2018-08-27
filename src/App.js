@@ -85,14 +85,16 @@ class App extends Component {
     storefronts.forEach(async (store, idx) => {
       let numProducts = store.numProducts;
       let arr = [];
-      for (let i = 0; i < numProducts; i ++) {
+      for (let i = 0; i < numProducts; i++) {
         let product = await contract.getProduct(account, idx, i.toString(), { from: account, });
-        let imgBuffer = await new Promise((resolve, reject) => {
-          ipfs.files.get(product[3], (err, files) => {
-            resolve(files[0].content.toString('base64'));
+        if (product[0]) {
+          let imgBuffer = await new Promise((resolve, reject) => {
+            ipfs.files.get(product[3], (err, files) => {
+              if (files) resolve(files[0].content.toString('base64'));
+            });
           });
-        });
-        arr.push({ name: product[0], price: product[1].c[0], quantity: product[2].c[0], imgBuffer, });
+          arr.push({ idx, i, name: product[0], price: product[1].c[0], quantity: product[2].c[0], imgBuffer, });
+        }
       }
       dispatch({ type: 'ADD_STORE_PRODUCTS', payload: arr, });
     });

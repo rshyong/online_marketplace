@@ -31,7 +31,7 @@ contract OnlineMarketplace {
     string name;
     string ipfsHash;
     uint funds;
-    uint numProducts;
+    uint numProducts; // this is actually the max number of products in this storefront. Lets me know which number to iterate up to when grabbing the products.
     mapping(string => Product) products;
   }
 
@@ -182,7 +182,6 @@ contract OnlineMarketplace {
     string memory _name = storeFronts[msg.sender][_index].name;
     emit EventDeleteStoreFront(_name);
     delete storeFronts[msg.sender][_index];
-    numStoreFronts[msg.sender]--;
   }
 
   /** @dev Converts uint to string.
@@ -232,7 +231,6 @@ contract OnlineMarketplace {
     string memory _name = storeFronts[msg.sender][_index].products[_num].name;
     emit EventDeleteProduct(_name);
     delete storeFronts[msg.sender][_index].products[_num];
-    storeFronts[msg.sender][_index].numProducts--;
   }
 
   /** @dev Get product from storefront.

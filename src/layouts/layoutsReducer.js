@@ -38,7 +38,7 @@ const initialState = {
         case 'UPDATE_PRICE':
             updatedProducts = Object.assign([], state.products);
             let { storeNum, productIdx, newPrice, } = action.payload;
-            updatedProducts[ Number(storeNum)][Number(productIdx)].price = newPrice;
+            updatedProducts[ Number(storeNum)].filter(prod => prod.i === Number(productIdx))[0].price = newPrice;
             return Object.assign({}, state, { products: updatedProducts, });
         default:
             return state;
