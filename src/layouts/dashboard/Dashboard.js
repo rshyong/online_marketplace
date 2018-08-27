@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import AdminDashboard from './AdminDashboard';
 import StoreOwnerDashboard from './StoreOwnerDashboard';
+import CustomerDashboard from './CustomerDashboard';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -27,7 +28,9 @@ class Dashboard extends Component {
             <p><strong>Hi {this.props.user.name}!</strong></p>
             {this.props.privilege === 'Admin'
             ? <AdminDashboard addOwner={this.props.addOwner} owners={this.props.owners} />
-            : <StoreOwnerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} stores={this.props.owner_stores}/>
+            : this.props.privilege === 'Store Owner'
+              ? <StoreOwnerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} stores={this.props.owner_stores}/>
+              : <CustomerDashboard account={this.props.account} ipfs={this.props.ipfs} addNewStore={this.addNewStore} errorMsg={this.props.errorMsg} stores={this.props.owner_stores}/>
             }
           </div>
         </div>
