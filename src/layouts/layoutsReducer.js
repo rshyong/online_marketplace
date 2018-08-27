@@ -26,7 +26,7 @@ const initialState = {
             let storeProducts = state.products[sNum] || [];
             storeProducts.push(action.payload);
             let newProducts = Object.assign([], state, state.products, storeProducts);
-            return Object.assign({}, state, { producs: newProducts, });
+            return Object.assign({}, state, { products: newProducts, });
         case 'ADD_STORE_PRODUCTS':
             updatedProducts = Object.assign([], state.products);
             action.payload.forEach(product => {

@@ -51,8 +51,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             let ipfsHash = result[0].hash;
             let addProdResult = await this.props.contract.addProduct(storeNum, name, price, quantity, ipfsHash, { from: this.props.account, });
             if (addProdResult) {
-                dispatch({ type: 'ADD_PRODUCT', payload: { storeNum, name, price, quantity, imgBuffer: imgBuffer.toString('base64'), }});
                 dispatch({ type: 'SET_ERRORMSG', payload: '', });
+                dispatch({ type: 'ADD_PRODUCT', payload: { storeNum, name, price, quantity, imgBuffer: imgBuffer.toString('base64'), }});
             }
           });
         };
