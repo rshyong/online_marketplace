@@ -2,7 +2,7 @@
 
 ## Overview
 
-The purpose of this project is to create an online marketplace that operates on the blockchain. There are three types of accounts: admin, store owners, and customers. The admin will be the account that deploys the contract, and will have the ability to add store owners to the website as well as activate/ deactive the circuit breaker (which prevents purchases and withdrawals in case there is a bug). The store owners have the ability to create a store front and add products to their stores. They also have the ability to remove the products, change the price of the products and withdraw funds from the stores. Finally, customers can browse through the different stores and purchase any products that they want.
+The purpose of this project is to create an online marketplace that operates on the blockchain. There are three types of accounts: admin, store owners, and customers. The admin will be the account that deploys the contract, and will have the ability to add store owners to the website as well as activate/ deactive the circuit breaker (which prevents purchases and withdrawals in case there is a bug). The store owners have the ability to create a store and add products to their stores. They also have the ability to remove the products, change the price of the products and withdraw funds from the stores. Finally, customers can browse through the different stores and purchase any products that they want.
 
 ## Running the App
 
@@ -14,7 +14,7 @@ To run the app locally, first make sure ganache-cli and truffle are installed gl
 
 This webapp uses the UPort library to login, so please download the UPort app on your phone.
 
-In order to switch accounts, please select a different account in metamask and make sure to refresh the page in order for the app to recognize the new account.
+In order to switch accounts, please select a different account in Metamask and make sure to refresh the page in order for the app to recognize the new account.
 
 When adding images (i.e. for store fronts and products), it will take a while before the Metamask prompt shows up. This is because the webapp is storing the images on IPFS.
 
