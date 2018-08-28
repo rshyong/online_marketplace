@@ -36,7 +36,7 @@ import './SafeMath.sol';
     *@param b Integer to be divided
     */
      function divide(uint a, uint b) public {
-        mulResult = a.div(b);
+        divResult = a.div(b);
      }
 
     /** Add two integers using SafeMath
@@ -44,7 +44,7 @@ import './SafeMath.sol';
     *@param b Integer to be added
     */
      function add(uint a, uint b) public {
-        mulResult = a.add(b);
+        addResult = a.add(b);
      }
 
     /** Subtract two integers using SafeMath
@@ -52,7 +52,7 @@ import './SafeMath.sol';
     *@param b Integer to be subtracted
     */
      function subtract(uint a, uint b) public {
-        mulResult = a.sub(b);
+        subResult = a.sub(b);
      }
 
     /** Find the modulo of two integers using SafeMath
@@ -60,6 +60,6 @@ import './SafeMath.sol';
     *@param b Integer
     */
      function modulo(uint a, uint b) public {
-        mulResult = a.mod(b);
+        modResult = a.mod(b);
      }
  }
