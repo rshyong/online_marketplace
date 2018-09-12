@@ -2,11 +2,9 @@
 
 ## Overview
 
-The purpose of this project is to create an online marketplace that operates on the blockchain. The app uses UPort for open identity management
+The purpose of this project is to create an online marketplace that operates on the blockchain. The app uses UPort for open identity management as well as IPFS for storing images.
 
 ![admin image](./images/uport_signin.png)
-
-as well as IPFS for storing images.
 
 There are three types of accounts: admin, store owners, and customers. In order to switch between accounts, please select a different account in Metamask and refresh the page.
 
