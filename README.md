@@ -2,23 +2,37 @@
 
 ## Overview
 
-The purpose of this project is to create an online marketplace that operates on the blockchain. The app uses UPort for open identity management and IPFS for storing images.
+The purpose of this project is to create an online marketplace that operates on the blockchain. The app uses UPort for open identity management
+
+![admin image](./images/uport_signin.png)
+
+as well as IPFS for storing images.
 
 There are three types of accounts: admin, store owners, and customers. In order to switch between accounts, please select a different account in Metamask and refresh the page.
 
 **Admins**
 
-The admin will be the account that deploys the contract, and will have the ability to add store owners to the website as well as activate/ deactive the circuit breaker (which prevents purchases and withdrawals in case there is a bug). The admin on the contract will be the first account in metamask (Account 1).
+The admin for the contract is the first account in metamask (Account 1). Admins have the ability to add store owners to the website as well as activate/ deactive the circuit breaker, preventing purchases and withdrawals in case there is a bug.
 
 ![admin image](./images/admin.png)
 
 **Store Owners**
 
-The store owners have the ability to create a store and add products to their stores. They also have the ability to remove the products, change the price of the products and withdraw funds from the stores. 
+The store owners have the ability to create a store and add products to their stores. They also have the ability to remove the products, change the price of the products and withdraw funds from the stores.
+
+![admin image](./images/storeowner.png)
+
+![admin image](./images/store_products.png)
 
 **Customers**
 
-Customers can browse through the different stores and purchase any products that they want.
+Customers can browse through the different stores
+
+![admin image](./images/shopper_stores.png)
+
+and purchase any products that they want.
+
+![admin image](./images/shopper_products.png)
 
 ## Usage
 
