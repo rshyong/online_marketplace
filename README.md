@@ -4,7 +4,21 @@
 
 The purpose of this project is to create an online marketplace that operates on the blockchain. The app uses UPort for open identity management and IPFS for storing images.
 
-There are three types of accounts: admin, store owners, and customers. The admin will be the account that deploys the contract, and will have the ability to add store owners to the website as well as activate/ deactive the circuit breaker (which prevents purchases and withdrawals in case there is a bug). The store owners have the ability to create a store and add products to their stores. They also have the ability to remove the products, change the price of the products and withdraw funds from the stores. Finally, customers can browse through the different stores and purchase any products that they want.
+There are three types of accounts: admin, store owners, and customers. In order to switch between accounts, please select a different account in Metamask and refresh the page.
+
+**Admins**
+
+The admin will be the account that deploys the contract, and will have the ability to add store owners to the website as well as activate/ deactive the circuit breaker (which prevents purchases and withdrawals in case there is a bug). The admin on the contract will be the first account in metamask (Account 1).
+
+![admin image](./images/admin")
+
+**Store Owners**
+
+The store owners have the ability to create a store and add products to their stores. They also have the ability to remove the products, change the price of the products and withdraw funds from the stores. 
+
+**Customers**
+
+Customers can browse through the different stores and purchase any products that they want.
 
 ## Usage
 
@@ -35,8 +49,6 @@ Finally, make sure to login to metamask with the provided seed from ganache-cli.
 **Please note that for some of the contract functions (deleting products and withdrawing funds), metamask incorrectly estimates the amount of gas needed to run it and will therefore return an 'out of gas' error. In instances like these, hit the edit button in metamask and raise the gas limit.**
 
 This webapp uses the UPort library to login, so please download the UPort app on your phone.
-
-The admin on the contract will be the first account in metamask (Account 1). In order to switch accounts, please select a different account in Metamask and refresh the page.
 
 When adding images (i.e. for store fronts and products), it may take awhile for the Metamask prompt to show up. Please be patient.
 
