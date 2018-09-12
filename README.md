@@ -8,7 +8,7 @@ There are three types of accounts: admin, store owners, and customers. The admin
 
 ## Usage
 
-To run the app locally, first make sure ganache-cli and truffle are installed globally by typing: 
+To run the app locally, first make sure ganache-cli and truffle are installed globally by running: 
 
 ```npm i -g truffle ganache-cli```
 
