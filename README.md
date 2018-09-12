@@ -29,6 +29,8 @@ and add products to their stores.
 
 They also have the ability to remove the products, change the price of the products and withdraw funds from the stores.
 
+![admin image](./images/withdraw_funds.png)
+
 **Customers**
 
 Customers can browse through the different stores
