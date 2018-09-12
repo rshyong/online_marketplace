@@ -10,7 +10,7 @@ There are three types of accounts: admin, store owners, and customers. In order 
 
 **Admins**
 
-The admin for the contract is the first account in metamask (Account 1). Admins have the ability to add store owners to the website as well as activate/ deactive the circuit breaker, preventing purchases and withdrawals in case there is a bug.
+The admin for the contract is the first account in metamask (Account 1). Admins have the ability to add store owners to the website as well as activate/ deactivate the circuit breaker, preventing purchases and withdrawals in case there is a bug.
 
 ![admin image](./images/admin.png)
 
