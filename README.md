@@ -16,7 +16,7 @@ The admin for the contract is the first account in metamask (Account 1). Admins 
 
 **Store Owners**
 
-The store owners have the ability to create a store 
+Store owners have the ability to create a store 
 
 ![admin image](./images/storeowner.png)
 
