@@ -6,7 +6,31 @@ The purpose of this project is to create an online marketplace that operates on 
 
 ## Running the App
 
-To run the app locally, first make sure ganache-cli and truffle are installed globally. In the terminal, run ```ganache-cli -l 20000000000``` ( the -l flag sets the gas limit; this is necessary because some of my contract functions exceed the default gas limit). In a separate window, run ```npm i``` first to download all the node_modules. Then run ```truffle compile```, ```truffle migrate```, and ```npm start``` to start the app. Finally, make sure to login to metamask with the provided seed from ganache-cli. _Also remember to go into the metamask settings and reset the account._ The admin on the contract will be the first account in metamask (Account 1).
+To run the app locally, first make sure ganache-cli and truffle are installed globally. 
+
+```npm i -g truffle ganache-cli```
+
+Then download all the node modules.
+
+``` npm i ```
+
+Once that is done, run 
+
+```ganache-cli -l 20000000000```
+
+The -l flag sets the gas limit; this is necessary because some of the contract functions exceed the default gas limit. 
+
+Then run 
+
+```
+truffle compile
+truffle migrate
+npm start
+```
+
+to start the app. 
+
+Finally, make sure to login to metamask with the provided seed from ganache-cli. Remember to reset the account in order to prevent nonce mismatch errors. The admin on the contract will be the first account in metamask (Account 1).
 
 **Please note that for some of the contract functions (deleting products and withdrawing funds), metamask incorrectly estimates the amount of gas needed to run it and will therefore return an 'out of gas' error. In instances like these, hit the edit button in metamask and raise the gas limit.**
 
