@@ -16,11 +16,15 @@ The admin for the contract is the first account in metamask (Account 1). Admins 
 
 **Store Owners**
 
-The store owners have the ability to create a store and add products to their stores. They also have the ability to remove the products, change the price of the products and withdraw funds from the stores.
+The store owners have the ability to create a store 
 
 ![admin image](./images/storeowner.png)
 
+and add products to their stores. 
+
 ![admin image](./images/store_products.png)
+
+They also have the ability to remove the products, change the price of the products and withdraw funds from the stores.
 
 **Customers**
 
