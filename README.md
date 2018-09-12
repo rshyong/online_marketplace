@@ -20,6 +20,8 @@ Store owners have the ability to create a store
 
 ![admin image](./images/storeowner.png)
 
+
+
 and add products to their stores. 
 
 ![admin image](./images/store_products.png)
